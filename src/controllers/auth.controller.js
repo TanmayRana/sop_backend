@@ -14,17 +14,20 @@ const OTP_MAX_ATTEMPTS = 5;
 const generateOtp = () => String(crypto.randomInt(100000, 1000000));
 
 const setAuthCookies = (res, { accessToken, refreshToken }) => {
+  const isProduction = process.env.NODE_ENV === 'production';
+  const isSecure = isProduction && process.env.HTTPS === 'true';
+
   res.cookie('accessToken', accessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: isSecure,
+    sameSite: isSecure ? 'none' : 'lax',
     maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
   });
 
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: isSecure,
+    sameSite: isSecure ? 'none' : 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 };
@@ -305,10 +308,13 @@ const refreshToken = asyncHandler(async (req, res) => {
 
     const { accessToken } = generateTokens(user._id);
 
+    const isSecure =
+      process.env.NODE_ENV === 'production' && process.env.HTTPS === 'true';
+
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: isSecure,
+      sameSite: isSecure ? 'none' : 'lax',
       maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
     });
 
