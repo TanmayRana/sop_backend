@@ -1,0 +1,39 @@
+=== SCRIPT STARTED ===
+Starting verification...
+Verification FAILED: BadRequestError: 400 This model does not support response format `json_schema`. See supported models at https://console.groq.com/docs/structured-outputs#supported-models
+    at APIError.generate (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/openai/core/error.mjs:41:20)
+    at OpenAI.makeStatusError (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/openai/client.mjs:162:32)
+    at OpenAI.makeRequest (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/openai/client.mjs:330:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/@langchain/openai/dist/chat_models/completions.js:219:54
+    at async pRetry (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/@langchain/core/dist/utils/p-retry/index.js:123:19)
+    at async run (C:\Users\Tanmay\OneDrive\Desktop\tr intership\sop-genius\SOP_backend\node_modules\p-queue\dist\index.js:163:29) {
+  status: 400,
+  headers: Headers {
+    date: 'Tue, 10 Feb 2026 05:38:12 GMT',
+    'content-type': 'application/json',
+    'content-length': '230',
+    connection: 'keep-alive',
+    'cache-control': 'private, max-age=0, no-store, no-cache, must-revalidate',
+    server: 'cloudflare',
+    vary: 'Origin',
+    'x-groq-region': 'bom',
+    'x-request-id': 'req_01kh30xb3cfcx9rt2hq0mxd7yw',
+    via: '1.1 google',
+    'cf-cache-status': 'DYNAMIC',
+    'set-cookie': '__cf_bm=c0m1N31SCdJ6oTmbSwwhBFM0ll.ICWamIoJV3q_3fGw-1770701892.6811137-1.0.1.1-HYvFrYju9UZH2HvsaXlutt33dV1h44JptEnHDryGkrrfESq9QMHIuglRokWoK9cCTwYF0dd0fCI5NWZ_U8TSwQamqbIVVxdKirjiYOcNsU1jK..NvnaMRWRRLziCp5mD; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Tue, 10 Feb 2026 06:08:12 GMT',
+    'strict-transport-security': 'max-age=15552000',
+    'cf-ray': '9cb9424d3ab67ee5-MAA',
+    'alt-svc': 'h3=":443"; ma=86400'
+  },
+  requestID: 'req_01kh30xb3cfcx9rt2hq0mxd7yw',
+  error: {
+    message: 'This model does not support response format `json_schema`. See supported models at https://console.groq.com/docs/structured-outputs#supported-models',
+    type: 'invalid_request_error',
+    param: 'response_format'
+  },
+  code: undefined,
+  param: 'response_format',
+  type: 'invalid_request_error',
+  pregelTaskId: '23aa418b-a228-576f-baf6-ac83a1ccd324'
+}

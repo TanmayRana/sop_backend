@@ -1,0 +1,15 @@
+=== SCRIPT STARTED ===
+Starting verification...
+Verification FAILED: Error: Zod field at `#/definitions/extract/properties/practicalExample/properties/code` uses `.optional()` without `.nullable()` which is not supported by the API. See: https://platform.openai.com/docs/guides/structured-outputs?api-mode=responses#all-fields-must-be-required
+    at Object.entries.reduce.properties (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/openai/_vendor/zod-to-json-schema/parsers/object.mjs:38:23)
+    at Array.reduce (<anonymous>)
+    at parseObjectDef (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/openai/_vendor/zod-to-json-schema/parsers/object.mjs:23:40)
+    at selectParser (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/openai/_vendor/zod-to-json-schema/parseDef.mjs:107:20)
+    at parseDef (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/openai/_vendor/zod-to-json-schema/parseDef.mjs:52:24)
+    at parseOptionalDef (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/openai/_vendor/zod-to-json-schema/parsers/optional.mjs:5:16)
+    at selectParser (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/openai/_vendor/zod-to-json-schema/parseDef.mjs:138:20)
+    at parseDef (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/openai/_vendor/zod-to-json-schema/parseDef.mjs:52:24)
+    at Object.entries.reduce.properties (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/openai/_vendor/zod-to-json-schema/parsers/object.mjs:27:31)
+    at Array.reduce (<anonymous>) {
+  pregelTaskId: '18e1716e-4292-5737-8e9a-c2ddfe22c23d'
+}

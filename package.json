@@ -1,0 +1,50 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node --watch src/server.js",
+    "lint": "eslint . --fix",
+    "line:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "inngest:dev": "npx --ignore-scripts=false inngest-cli@latest dev -u http://localhost:9000/api/inngest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@huggingface/transformers": "^3.3.2",
+    "@langchain/community": "^1.1.13",
+    "@langchain/core": "^1.1.20",
+    "@langchain/google-genai": "^2.1.16",
+    "@langchain/langgraph": "^1.1.4",
+    "@langchain/openai": "^1.2.6",
+    "@langchain/textsplitters": "^1.0.1",
+    "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.9.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "express-async-handler": "^1.2.0",
+    "inngest": "^3.51.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.5",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "nodemailer": "^8.0.1",
+    "nodemon": "^3.1.11",
+    "pdf-parse": "^1.1.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.1"
+  }
+}

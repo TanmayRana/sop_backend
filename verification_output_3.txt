@@ -1,0 +1,15 @@
+=== SCRIPT STARTED ===
+Starting verification...
+Verification FAILED: Error: Invalid method: function_calling. Supported methods are: jsonSchema, functionCalling, jsonMode
+    at getStructuredOutputMethod (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/@langchain/openai/dist/utils/output.js:25:82)
+    at ChatOpenAI.withStructuredOutput (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/@langchain/openai/dist/chat_models/base.js:497:18)
+    at RunnableCallable.llmNode [as func] (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/src/services/ChatAgent.js:140:29)
+    at file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/@langchain/langgraph/dist/utils.js:38:108
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
+    at AsyncLocalStorageProvider.runWithConfig (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/@langchain/core/dist/singletons/async_local_storage/index.js:47:18)
+    at RunnableCallable.invoke (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/@langchain/langgraph/dist/utils.js:38:63)
+    at RunnableSequence.invoke (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/@langchain/core/dist/runnables/base.js:943:26)
+    at async _runWithRetry (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/@langchain/langgraph/dist/pregel/retry.js:48:13)
+    at async PregelRunner._executeTasksWithRetry (file:///C:/Users/Tanmay/OneDrive/Desktop/tr%20intership/sop-genius/SOP_backend/node_modules/@langchain/langgraph/dist/pregel/runner.js:140:24) {
+  pregelTaskId: 'ab5d47e6-ce63-5a7a-b715-7d82d49b7859'
+}

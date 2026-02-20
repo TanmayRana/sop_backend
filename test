@@ -1,0 +1,310 @@
+export const FinalOutputSchema = z.object({
+  directAnswer: z
+    .string()
+    .describe("Clear and concise direct answer to the user's question"),
+
+  detailedExplanation: z
+    .array(
+      z.object({
+        step: z.number().describe("Step number"),
+        explanation: z.string().describe("Detailed explanation for this step")
+      })
+    )
+    .min(1)
+    .describe("Step-by-step explanation derived from retrieved context"),
+
+  keyPoints: z
+    .array(z.string())
+    .min(1)
+    .max(6)
+    .describe("Summary bullet points"),
+
+  practicalExample: z
+    .object({
+      title: z.string().describe("Title of the example"),
+      description: z.string().describe("Explanation of the example"),
+      code: z.string().nullable().describe("Code snippet if applicable")
+    })
+    .nullable(),
+
+  suggestions: z
+    .array(z.string())
+    .min(2)
+    .describe("Best practices, tips, or recommendations"),
+
+  limitations: z
+    .string()
+    .nullable()
+    .describe("What cannot be answered due to missing context"),
+
+  followUpQuestions: z
+    .array(z.string())
+    .min(2)
+    .max(3)
+    .describe("Relevant questions user may ask next"),
+
+  confidenceScore: z
+    .number()
+    .min(0)
+    .max(1)
+    .describe("AI confidence based on context coverage")
+});
+
+
+// const SYSTEM_PROMPT = `
+// You are an intelligent AI assistant powered by a vector database.
+
+// Your task:
+// - Answer the user's question using ONLY the information provided in the retrieved context.
+// - Carefully analyze ALL retrieved chunks before answering.
+// - Cross-check facts across multiple chunks when available.
+// - If multiple chunks partially answer the question, combine them logically.
+
+// STRICT RULES:
+// - Do NOT hallucinate or invent information.
+// - If the answer is not found in the retrieved context, clearly say:
+//   "The provided documents do not contain enough information to answer this question."
+// - Do NOT use external knowledge.
+// - Be precise, clear, and technically correct.
+
+// ANSWER FORMAT (MANDATORY):
+
+// 1. **Direct Answer**
+//    - Give a clear, concise, and accurate answer to the user's question.
+
+// 2. **Detailed Explanation**
+//    - Explain the answer step by step.
+//    - Reference relevant concepts found in the retrieved context.
+//    - Keep explanations simple and easy to understand.
+
+// 3. **Key Points / Summary**
+//    - Provide 3–6 bullet points summarizing the core ideas.
+
+// 4. **Practical Example (if applicable)**
+//    - Include a real-world or technical example when helpful.
+//    - Use code blocks if explaining code or logic.
+
+// 5. **Suggestions / Recommendations**
+//    - Suggest best practices, improvements, or next steps.
+//    - Mention common mistakes to avoid if relevant.
+
+// 6. **Related Follow-up Questions**
+//    - Suggest 2–3 relevant follow-up questions the user might ask next.
+
+// STYLE GUIDELINES:
+// - Use professional and friendly tone.
+// - Use headings, bullet points, and code blocks for clarity.
+// - Avoid unnecessary verbosity.
+// - Prefer clarity over complexity.
+
+// `;
+
+
+// const SYSTEM_PROMPT = `
+// You are an Expert Knowledge Assistant specialized in Context-Aware Retrieval.
+
+// Your core function is to synthesize accurate answers based STRICTLY on the provided retrieved context. You must adopt a professional, objective, and analytical tone.
+
+// ### ⚠️ CRITICAL RULES (NON-NEGOTIABLE):
+// 1.  **NO EXTERNAL KNOWLEDGE:** You must answer using *only* the provided context chunks. Do not use your own training data to fill gaps.
+// 2.  **NO HALLUCINATION:** If the exact answer is not in the text, do not invent one. Do not infer examples or recommendations unless they are explicitly present in the source text.
+// 3.  **CITATION REQUIRED:** Every distinct claim must be supported by the source. If the input includes chunk IDs (e.g., [ID: 1]), append citations to your sentences.
+// 4.  **HANDLING MISSING INFO:**
+//     - If the context is completely irrelevant, state: "The provided documents do not contain information relevant to this query."
+//     - If the context is partial, state what is known and explicitly state what is missing.
+
+// ### 🧠 REASONING PROCESS:
+// Before answering, adhere to this sequence:
+// 1.  **Analyze:** Scan all context chunks for keywords related to the user query.
+// 2.  **Filter:** Discard irrelevant information.
+// 3.  **Synthesize:** Combine facts from multiple chunks if necessary to form a complete answer.
+// 4.  **Verify:** Check if your drafted answer is fully supported by the text.
+
+// ### 📝 RESPONSE FORMAT:
+
+// **1. Direct Answer**
+//    - A single, concise paragraph (2-3 sentences) summarizing the specific answer to the question.
+
+// **2. Evidence-Based Detail**
+//    - Provide a step-by-step or detailed breakdown.
+//    - Quote short phrases from the context if necessary to ensure accuracy.
+//    - Resolve any conflicting information found in different chunks (e.g., "Document A suggests X, while Document B clarifies Y").
+
+// **3. Key Takeaways**
+//    - 3-5 Bullet points extracting the most critical facts.
+
+// **4. Contextual Examples / Logic (CONDITIONAL)**
+//    - *Only* include this section if the source text contains specific code snippets, scenarios, or workflows. Do NOT invent examples.
+
+// **5. Missing Information (CONDITIONAL)**
+//    - If the user asked for X, but the text only covers Y, explicitly state: "The documents cover Y, but do not provide details on X."
+
+// ---
+// Begin processing the user query now.
+// `;
+
+
+
+console.log('=== SCRIPT STARTED ===');
+import 'dotenv/config';
+import { z } from 'zod';
+
+import { Annotation, MessagesAnnotation, StateGraph } from '@langchain/langgraph';
+import { HumanMessage, SystemMessage, AIMessage } from '@langchain/core/messages';
+import { ChatOpenAI } from '@langchain/openai';
+
+const llm = new ChatOpenAI({
+  model: 'llama-3.3-70b-versatile',
+  temperature: 0,
+  apiKey: process.env.GROQ_API_KEY || process.env.OPENAI_API_KEY,
+  configuration: {
+    baseURL: 'https://api.groq.com/openai/v1',
+  },
+});
+
+// userIntent: z
+//   .enum(["learning", "exam", "coding", "explanation", "revision"])
+//   .optional()
+//   .describe("AI-detected intent of the question")
+
+export const QuestionSchema = z.object({
+  question: z
+    .string()
+    .min(5, "Question must be at least 5 characters")
+    .max(1000, "Question is too long")
+    .describe("User's question to be answered"),
+
+  contextAvailable: z
+    .boolean()
+    .default(true)
+    .describe("Whether vector database context was retrieved"),
+
+
+});
+
+export const FinalOutputSchema = z.object({
+  directAnswer: z
+    .string()
+    .describe("Clear and concise direct answer to the user's question"),
+
+  detailedExplanation: z
+    .array(
+      z.object({
+        step: z.number().describe("Step number"),
+        explanation: z.string().describe("Detailed explanation for this step")
+      })
+    )
+    .min(1)
+    .describe("Step-by-step explanation derived from retrieved context"),
+
+  keyPoints: z
+    .array(z.string())
+    .min(1)
+    .max(6)
+    .describe("Summary bullet points"),
+
+  practicalExample: z
+    .object({
+      title: z.string().describe("Title of the example"),
+      description: z.string().describe("Explanation of the example"),
+      code: z.string().nullable().describe("Code snippet if applicable")
+    })
+    .nullable(),
+
+  suggestions: z
+    .array(z.string())
+    .min(2)
+    .describe("Best practices, tips, or recommendations"),
+
+  limitations: z
+    .string()
+    .nullable()
+    .describe("What cannot be answered due to missing context"),
+
+  followUpQuestions: z
+    .array(z.string())
+    .min(2)
+    .max(3)
+    .describe("Relevant questions user may ask next"),
+
+  confidenceScore: z
+    .number()
+    .min(0)
+    .max(1)
+    .describe("AI confidence based on context coverage")
+});
+
+
+
+const SYSTEM_PROMPT = `
+You are an intelligent Knowledge Assistant. Your task is to answer the user's question based STRICTLY on the provided context chunks from the vector database.
+
+**Instructions:**
+1.  **Analyze the Context:** Read the provided context chunks carefully.
+2.  **No Outside Knowledge:** Do NOT use your own training data to answer. If the answer is not in the context, explicitly say: "The provided documents do not contain enough information to answer this question."
+3.  **Be Detailed but Precise:** Provide a comprehensive answer, but ensure every fact is supported by the context.
+4.  **Structure Your Response:** You must use the "Answer Format" defined below.
+
+**Context:**
+${context}
+
+**Question:**
+${question}
+
+**Answer Format:**
+
+### Summary
+[Provide a clear, direct answer in 2-3 sentences.]
+
+### Detailed Explanation
+[Break down the answer using paragraphs. If the context covers different aspects, separate them logically. Explain *why* or *how* based on the text.]
+
+### Key Points
+* [Point 1]
+* [Point 2]
+* [Point 3]
+
+### Missing Information (If applicable)
+[If the context partially answers the question but misses some details, mention what is missing here.]
+
+**Answer:**
+`;
+
+
+const llmNode = async state => {
+  const structuredLlm = llm.withStructuredOutput(FinalOutputSchema, {
+    method: 'functionCalling',
+  });
+
+  const lastUserMessage = state.messages.at(-1);
+
+  const result = await structuredLlm.invoke([
+    new SystemMessage(SYSTEM_PROMPT),
+    lastUserMessage,
+  ]);
+
+  return {
+    messages: [
+      new AIMessage({
+        content: JSON.stringify(result),
+      }),
+    ],
+  };
+};
+
+export const ChatLangChainAgent = new StateGraph(MessagesAnnotation)
+  .addNode('llm', llmNode)
+  .addEdge('__start__', 'llm')
+  .compile();
+
+
+export async function runChatAgent(
+  input
+) {
+  const result = await ChatLangChainAgent.invoke({
+    messages: [new HumanMessage(JSON.stringify(input))]
+  })
+  const finalOutput = JSON.parse(result.messages.at(-1).content);
+
+  return finalOutput;
+}

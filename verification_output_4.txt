@@ -1,0 +1,49 @@
+=== SCRIPT STARTED ===
+Starting verification...
+Agent Output: {
+  "directAnswer": "The SOP structure includes an introduction, educational background, work experience, and goals.",
+  "detailedExplanation": [
+    {
+      "step": 1,
+      "explanation": "The SOP structure is composed of several key sections."
+    },
+    {
+      "step": 2,
+      "explanation": "It begins with an introduction, which provides an overview of the applicant's background and interests."
+    },
+    {
+      "step": 3,
+      "explanation": "The educational background section outlines the applicant's academic history and relevant coursework."
+    },
+    {
+      "step": 4,
+      "explanation": "Work experience is also an essential component, highlighting the applicant's professional skills and achievements."
+    },
+    {
+      "step": 5,
+      "explanation": "Finally, the goals section specifies the applicant's objectives and motivations for pursuing their chosen path."
+    }
+  ],
+  "keyPoints": [
+    "Introduction",
+    "Educational background",
+    "Work experience",
+    "Goals"
+  ],
+  "practicalExample": {
+    "title": "SOP Example",
+    "description": "A strong SOP will clearly and concisely outline the applicant's background, experience, and goals.",
+    "code": null
+  },
+  "suggestions": [
+    "Tailor your SOP to your specific goals and experiences.",
+    "Use clear and concise language throughout the SOP."
+  ],
+  "limitations": null,
+  "followUpQuestions": [
+    "What is the purpose of a SOP?",
+    "How long should a SOP be?"
+  ],
+  "confidenceScore": 0.8
+}
+Verification SUCCESSFUL!
