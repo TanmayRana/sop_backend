@@ -2,10 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node --watch src/server.js",
+    "start": "node src/server.js",
     "lint": "eslint . --fix",
     "line:fix": "eslint . --fix",
     "format": "prettier --write .",
